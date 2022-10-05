@@ -7,17 +7,17 @@ interface Props {
 }
 
 export const Item = ({ item }: Props) => {
-  const y = useMotionValue(0)
-  const boxShadow = useRaisedShadow(y)
+  const x = useMotionValue(0)
+  const boxShadow = useRaisedShadow(x)
   const dragControls = useDragControls()
 
   return (
     <Reorder.Item
       value={item}
       id={item as string}
-      style={{ boxShadow, y }}
-      dragListener={false}
-      dragControls={dragControls}
+      style={{ boxShadow, x }}
+      // dragListener={false}
+      // dragControls={dragControls}
     >
       <span>{item}</span>
       {/* <ReorderIcon dragControls={dragControls} /> */}
