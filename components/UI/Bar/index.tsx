@@ -30,7 +30,7 @@ const Bar = ({
   return (
     <Box sx={styles}>
       <Box sx={BarStyle} className={classNames}>
-        <span className="Bar__Text">{val}</span>
+        <span className="Bar__Text"></span>
       </Box>
     </Box>
   )

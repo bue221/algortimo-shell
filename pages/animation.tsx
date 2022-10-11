@@ -1,21 +1,31 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Button, Container } from '@mui/material'
+import {
+  PauseCircleFilledRounded,
+  PlayArrowRounded,
+  SkipNext,
+  SkipPrevious
+} from '@mui/icons-material'
+import {
+  Container,
+  Fab,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Stack,
+  Typography
+} from '@mui/material'
 import { Box } from '@mui/system'
 import { MainLayout } from 'components/layouts'
-import { Item } from 'components/UI/Item'
 import SortChart from 'components/UI/SortView'
 import ShellSort from 'feature/shellSort/algoritmit'
-import { Reorder } from 'framer-motion'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useEffect } from 'react'
 import { NextPageWithLayout } from './_app'
 
 const Animation: NextPageWithLayout = () => {
-  const [items, setItems] = useState([4, 3, 1, 2, 3, 1, 2, 12, 2, 1, 2, 22])
   const [state, setState] = useState<any>({
-    trace: [],
     traceStep: -1,
-
     originalArray: [],
     array: [],
     groupA: [],
@@ -27,13 +37,43 @@ const Animation: NextPageWithLayout = () => {
     timeoutIds: [],
     playbackSpeed: 1
   })
+  const [sizeArray, setSizeArray] = useState(15)
+  const [trace, setTrace] = useState([])
+  const [step, setStep] = useState(-1)
+  const stop = useRef<any>(null)
 
-  const [change, setChange] = useState(false)
+  const generateRandomArray = () => {
+    function getRandomInt(max: number) {
+      return Math.floor(Math.random() * Math.floor(max)) + 1
+    }
+    const array = Array(sizeArray)
+      .fill(0)
+      .map(() => getRandomInt(sizeArray * 5))
+    setState({
+      ...state,
+      array
+    })
+    setStep(-1)
+    stop.current = false
+  }
 
-  const onClickStart = () => {
-    const trace: any = ShellSort(items)
-    setState((prev: any) => ({ ...state, array: items, trace }))
-    run(trace)
+  useEffect(() => {
+    stop.current = false
+    generateRandomArray()
+  }, [])
+
+  useEffect(() => {
+    generateRandomArray()
+  }, [sizeArray])
+
+  const onClickStart = async () => {
+    const traceData: any = ShellSort(state.array)
+    setTrace(traceData)
+    run(traceData)
+  }
+
+  function later(delay: number) {
+    return new Promise((resolve) => setTimeout(resolve, delay))
   }
 
   const _changeVisualState = (visualState: any) => {
@@ -48,45 +88,80 @@ const Animation: NextPageWithLayout = () => {
     })
   }
 
-  const clearTimeouts = () => {
-    console.log(state.timeoutIds)
-    // state.timeoutIds?.forEach((timeoutId: any) => clearTimeout(timeoutId))
-    // setState({ ...state, timeoutIds: [] })
-  }
-
-  const run = (trace: any) => {
-    const timeoutIds: any = []
+  const run = async (trace: any) => {
     const timer = 250 / state.playbackSpeed
-    // Set a timeout for each item in the trace
-    trace.forEach((item: any, i: number) => {
-      let timeoutId = setTimeout(
-        (item) => {
-          setState((prevState: any) => ({
-            ...state,
-            traceStep: prevState.traceStep + 1
-          }))
-          _changeVisualState(item)
-        },
-        i * timer,
-        item
-      )
-      timeoutIds.push(timeoutId)
-    })
-    // Clear timeouts upon completion
-    let timeoutId = setTimeout(clearTimeouts, trace.length * timer)
-    timeoutIds.push(timeoutId)
-    setState({ ...state, timeoutIds })
+
+    for (let i = 0; i <= trace.length - 1; i++) {
+      let item = trace[i]
+
+      if (stop.current) {
+        break
+      }
+
+      await later(timer)
+
+      setState((prevState: any) => ({
+        ...prevState,
+        traceStep: prevState.traceStep + 1
+      }))
+      _changeVisualState(item)
+      setStep((prevCounter) => prevCounter + 1)
+    }
+    stop.current = true
   }
 
-  console.log(state)
+  const pause = () => {
+    stop.current = true
+  }
+
+  const continueToRun = () => {
+    const traceData = trace.slice(step)
+    // setTrace(traceData)
+    stop.current = false
+    run(traceData)
+  }
+
+  const stepForward = () => {
+    if (step < trace.length - 1) {
+      const item = trace[step + 1]
+      setStep(step + 1)
+      _changeVisualState(item)
+    }
+  }
+
+  const stepBackward = () => {
+    if (step > 0) {
+      const item = trace[step - 1]
+      setStep(step - 1)
+      _changeVisualState(item)
+    }
+  }
+
   return (
     <Container sx={{ py: 3 }}>
-      <Reorder.Group axis="x" onReorder={setItems} values={items}>
-        {items.map((item, index) => (
-          <Item key={index} item={item} />
-        ))}
-      </Reorder.Group>
-      <Button onClick={onClickStart}>start animation</Button>
+      <Typography textAlign="center" variant="h3" fontWeight="bold" mb={4}>
+        Animación del metodo de ordenamiento shell
+      </Typography>
+      <Stack mb={10}>
+        <FormControl>
+          <InputLabel id="demo-simple-select-label">
+            Tamaño del array
+          </InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={sizeArray}
+            label="Tamaño del array"
+            onChange={(e) => setSizeArray(Number(e.target.value))}
+          >
+            {[15, 30, 45, 60, 75, 90, 105].map((i) => (
+              <MenuItem key={i} value={i}>
+                {i}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Stack>
       <Box sx={{ width: '100%', height: '100%' }}>
         <SortChart
           numbers={state.array}
@@ -98,6 +173,75 @@ const Animation: NextPageWithLayout = () => {
           sortedIndices={state.sortedIndices}
         />
       </Box>
+      <Stack
+        flexDirection="row"
+        justifyContent="center"
+        gap={4}
+        mt={2}
+        alignItems="center"
+      >
+        <Fab
+          color="primary"
+          onClick={stepBackward}
+          aria-label="Saltar hacia atras"
+          disabled={step < 1}
+        >
+          <SkipPrevious />
+        </Fab>
+        <Fab
+          disabled={step == -1 ? false : step == trace.length - 1}
+          color="primary"
+          onClick={
+            stop.current === false
+              ? step == -1
+                ? onClickStart
+                : pause
+              : step !== -1
+              ? continueToRun
+              : () => {}
+          }
+          aria-label="ejecutar"
+        >
+          {stop.current === false ? (
+            step == -1 ? (
+              <PlayArrowRounded />
+            ) : (
+              <PauseCircleFilledRounded />
+            )
+          ) : step !== -1 ? (
+            <PlayArrowRounded />
+          ) : (
+            <PlayArrowRounded />
+          )}
+        </Fab>
+        <Fab
+          disabled={step == trace.length - 1}
+          color="primary"
+          onClick={stepForward}
+          aria-label="Saltar hacia delante"
+        >
+          <SkipNext />
+        </Fab>
+      </Stack>
+      <Stack
+        flexDirection={{ xs: 'column', md: 'row' }}
+        justifyContent="center"
+        gap={3}
+        mt={5}
+      >
+        <Stack flexDirection="row" gap={2} alignItems="center">
+          <Box width={30} height={30} bgcolor="primary.main" />
+          <Typography>Comparación</Typography>
+        </Stack>
+        <Stack flexDirection="row" gap={2} alignItems="center">
+          <Box width={30} height={30} bgcolor="secondary.main" />
+          <Typography>Cambio</Typography>
+        </Stack>
+        <Stack flexDirection="row" gap={2} alignItems="center">
+          <Box width={30} height={30} bgcolor="success.main" />
+          <Typography>Ordenado</Typography>
+        </Stack>
+      </Stack>
     </Container>
   )
 }
