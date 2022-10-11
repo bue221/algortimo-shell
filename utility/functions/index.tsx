@@ -23,9 +23,10 @@ export const iteratorMethod = async (
   let numberDataPerIteration: Array<number> = []
 
   for (let i = 0; i <= iterations; i++) {
-    numberDataPerIteration.push(startData + jumpData * i)
-    let data = Array.from({ length: startData + jumpData * i }, () =>
-      Math.floor(Math.random() * 1000)
+    numberDataPerIteration.push(Number(startData) + Number(jumpData) * i)
+    let data = Array.from(
+      { length: Number(startData) + Number(jumpData) * i },
+      () => Math.floor(Math.random() * 1000)
     )
     let start = performance.now()
     await callback(data)

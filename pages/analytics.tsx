@@ -51,7 +51,7 @@ const Home: NextPageWithLayout = () => {
   const { register, handleSubmit } = useForm<IForm>({
     defaultValues: {
       typeData: 'aleatorio',
-      start: 10,
+      start: 1000,
       iter: 10,
       avance: 10
     }
@@ -89,6 +89,16 @@ const Home: NextPageWithLayout = () => {
         display: true,
         text: 'Representacion computacional O(n)'
       }
+    },
+    scales: {
+      y: {
+        ticks: {
+          // Include a dollar sign in the ticks
+          callback: function (value: any) {
+            return value + ' Seg'
+          }
+        }
+      }
     }
   }
 
@@ -98,7 +108,7 @@ const Home: NextPageWithLayout = () => {
     labels,
     datasets: [
       {
-        label: 'Dataset 1',
+        label: 'Datos aleatorios',
         data: experimentalData.times,
         borderColor: 'rgb(255, 99, 132)',
         backgroundColor: 'rgba(255, 99, 132, 0.5)'
@@ -157,6 +167,7 @@ const Home: NextPageWithLayout = () => {
             </FormControl>
             <TextField
               {...register('start')}
+              InputProps={{ inputProps: { min: 1000, max: 10000 } }}
               type="number"
               variant="outlined"
               color="primary"
@@ -164,6 +175,7 @@ const Home: NextPageWithLayout = () => {
               placeholder="Ingrese el valor de inicio"
             />
             <TextField
+              InputProps={{ inputProps: { min: 10, max: 50 } }}
               {...register('iter')}
               type="number"
               variant="outlined"
@@ -174,6 +186,7 @@ const Home: NextPageWithLayout = () => {
             <TextField
               {...register('avance')}
               type="number"
+              InputProps={{ inputProps: { min: 1000, max: 10000 } }}
               variant="outlined"
               color="primary"
               label="Avance por iteraciones"

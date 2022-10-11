@@ -22,7 +22,8 @@ type Props = {
 const navItems = [
   { path: '¿Qué es?', link: '/' },
   { path: '¿Como funciona?', link: '/animation' },
-  { path: 'Analisis computacional', link: '/analytics' }
+  { path: 'Analisis computacional', link: '/analytics' },
+  { path: 'Generar csv datos', link: '/generateArrays' }
 ]
 
 const variants = {
