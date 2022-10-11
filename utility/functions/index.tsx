@@ -39,3 +39,24 @@ export const iteratorMethod = async (
     dataIteration: numberDataPerIteration
   }
 }
+
+export const iteratorMethodWithImportData = async (
+  ArraysList: Array<any>,
+  callback: (data: Array<number>) => void
+) => {
+  let times: Array<number> = []
+  let numberDataPerIteration: Array<number> = []
+
+  for (let i = 0; i <= ArraysList.length - 1; i++) {
+    numberDataPerIteration.push(ArraysList[i].length)
+    let start = performance.now()
+    await callback(ArraysList[i])
+    let end = performance.now()
+    times.push(end - start)
+  }
+
+  return {
+    times,
+    dataIteration: numberDataPerIteration
+  }
+}

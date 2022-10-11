@@ -10,7 +10,11 @@ import {
   TextField,
   Typography
 } from '@mui/material'
-import { iteratorMethod, shellSortMethod } from 'utility/functions'
+import {
+  iteratorMethod,
+  iteratorMethodWithImportData,
+  shellSortMethod
+} from 'utility/functions'
 import { MainLayout } from '../components/layouts'
 import { NextPageWithLayout } from './_app'
 import {
@@ -29,6 +33,7 @@ import { Stack } from '@mui/system'
 import { useForm } from 'react-hook-form'
 import { useState } from 'react'
 import { LoadingButton } from '@mui/lab'
+import Papa from 'papaparse'
 
 ChartJS.register(
   CategoryScale,
@@ -48,7 +53,7 @@ interface IForm {
 }
 
 const Home: NextPageWithLayout = () => {
-  const { register, handleSubmit } = useForm<IForm>({
+  const { register, handleSubmit, watch } = useForm<IForm>({
     defaultValues: {
       typeData: 'aleatorio',
       start: 1000,
@@ -65,12 +70,14 @@ const Home: NextPageWithLayout = () => {
   const onSubmit = async (data: IForm) => {
     setLoading(true)
     try {
-      const info = await iteratorMethod(
-        data.iter,
-        data.avance,
-        data.start,
-        (data) => shellSortMethod(data)
-      )
+      const info =
+        watch('typeData') != 'aleatorio'
+          ? await iteratorMethodWithImportData(data1, (data) =>
+              shellSortMethod(data)
+            )
+          : await iteratorMethod(data.iter, data.avance, data.start, (data) =>
+              shellSortMethod(data)
+            )
       setExperimentalData(info as any)
     } catch (err) {
       console.log(err)
@@ -95,7 +102,7 @@ const Home: NextPageWithLayout = () => {
         ticks: {
           // Include a dollar sign in the ticks
           callback: function (value: any) {
-            return value + ' Seg'
+            return value + ' ms'
           }
         }
       }
@@ -124,7 +131,7 @@ const Home: NextPageWithLayout = () => {
         experimentalData.times[index]
       )
   )
-
+  const [data1, setData] = useState<any>([])
   return (
     <Container>
       <Box>
@@ -159,41 +166,86 @@ const Home: NextPageWithLayout = () => {
                 />
                 <FormControlLabel
                   value="archivo"
-                  disabled
                   control={<Radio />}
                   label="Data de archivo"
                 />
               </RadioGroup>
             </FormControl>
-            <TextField
-              {...register('start')}
-              InputProps={{ inputProps: { min: 1000, max: 10000 } }}
-              type="number"
-              variant="outlined"
-              color="primary"
-              label="Valor de inicio"
-              placeholder="Ingrese el valor de inicio"
-            />
-            <TextField
-              InputProps={{ inputProps: { min: 10, max: 50 } }}
-              {...register('iter')}
-              type="number"
-              variant="outlined"
-              color="primary"
-              label="Iteraciones"
-              placeholder="Ingrese el numero de iteraciones"
-            />
-            <TextField
-              {...register('avance')}
-              type="number"
-              InputProps={{ inputProps: { min: 1000, max: 10000 } }}
-              variant="outlined"
-              color="primary"
-              label="Avance por iteraciones"
-              placeholder="Ingrese el avance por iteraciones"
-            />
+            {watch('typeData') == 'aleatorio' ? (
+              <>
+                <TextField
+                  {...register('start')}
+                  InputProps={{ inputProps: { min: 1000, max: 10000 } }}
+                  type="number"
+                  variant="outlined"
+                  color="primary"
+                  label="Valor de inicio"
+                  placeholder="Ingrese el valor de inicio"
+                />
+                <TextField
+                  InputProps={{ inputProps: { min: 10, max: 50 } }}
+                  {...register('iter')}
+                  type="number"
+                  variant="outlined"
+                  color="primary"
+                  label="Iteraciones"
+                  placeholder="Ingrese el numero de iteraciones"
+                />
+                <TextField
+                  {...register('avance')}
+                  type="number"
+                  InputProps={{ inputProps: { min: 1000, max: 10000 } }}
+                  variant="outlined"
+                  color="primary"
+                  label="Avance por iteraciones"
+                  placeholder="Ingrese el avance por iteraciones"
+                />
+              </>
+            ) : (
+              <Button variant="contained" component="label">
+                Subir archivos csv
+                <input
+                  hidden
+                  accept="text/csv"
+                  multiple
+                  type="file"
+                  onChange={async (e) => {
+                    if (e.target.files && e.target.files[0]) {
+                      const allFilesData: any = []
+                      for (let i = 0; i <= e.target.files.length - 1; i++) {
+                        const reader = new FileReader()
+                        const file = e.target.files[i]
+                        reader.onload = async ({ target }) => {
+                          const csv: any = Papa.parse(target?.result as any, {
+                            header: false
+                          })
+                          const parsedData = csv?.data
+                          const columns = parsedData.map((i: any) =>
+                            Number(i[0])
+                          )
+                          // console.log(columns)
+                          allFilesData.push(columns)
+                          setData(
+                            allFilesData.sort(
+                              (a: Array<any>, b: Array<any>) =>
+                                a.length - b.length
+                            )
+                          )
+                        }
+                        reader.readAsText(file)
+                      }
+                    }
+                  }}
+                />
+              </Button>
+            )}
           </Stack>
-          <LoadingButton type="submit" variant="contained" loading={loading}>
+          <LoadingButton
+            disabled={watch('typeData') != 'aleatorio' && data1.length == 0}
+            type="submit"
+            variant="contained"
+            loading={loading}
+          >
             Ejecutar algoritmo
           </LoadingButton>
         </Stack>

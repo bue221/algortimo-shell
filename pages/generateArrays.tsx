@@ -18,7 +18,7 @@ const GenerateArrays: NextPageWithLayout = () => {
       .fill(0)
       .map(() => getRandomInt(sizeArray * 5))
     setCsvData(array)
-    console.log(array)
+    // console.log(array)
 
     // Format the CSV string
   }
