@@ -1,40 +1,19 @@
 /* eslint-disable react/no-unescaped-entities */
-import { Box, Typography } from '@mui/material'
+import { Typography } from '@mui/material'
 import { Container } from '@mui/system'
 import { MainLayout } from 'components/layouts'
 import App from 'components/UI/Data'
-import { AnimatePresence, motion, useScroll, useSpring } from 'framer-motion'
+import ProgressTopBar from 'components/UI/ProgressTopBar'
+import { AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import React from 'react'
 import { NextPageWithLayout } from './_app'
 
 const HomePage: NextPageWithLayout = () => {
-  const { scrollYProgress } = useScroll()
-  const scaleX = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001
-  })
   return (
     <>
       <Container sx={{ mb: 10 }}>
-        <Box
-          component={motion.div}
-          className="progress-bar"
-          bgcolor="primary.main"
-          style={
-            {
-              scaleX,
-              position: 'fixed',
-              top: 0,
-              left: 0,
-              right: 0,
-              height: '10px',
-              transformOrigin: '0%',
-              zIndex: 9999
-            } as any
-          }
-        />
+        <ProgressTopBar />
         <AnimatePresence>
           <Typography variant="h3" textAlign="center" mt={3}>
             <code>¿Qué es shell sort?</code>
