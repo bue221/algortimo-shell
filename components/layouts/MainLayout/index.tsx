@@ -12,6 +12,7 @@ import {
 import MenuIcon from '@mui/icons-material/Menu'
 import Link from 'next/link'
 import CustomDrawer from './drawer'
+import AppFooter from './footer'
 
 type Props = {
   children: ReactFragment
@@ -99,6 +100,7 @@ const MainLayout = ({ children, title, description }: Props): JSX.Element => {
           <Box sx={{ py: 8, width: '100%' }}>{children}</Box>
         </Box>
       </motion.main>
+      <AppFooter />
     </div>
   )
 }
