@@ -4,10 +4,12 @@ export const useStyles = () => ({
     minHeight: '218px',
     height: '40vh',
     padding: '1rem',
-    backgroundColor: 'var(--gray-300)',
+    backgroundColor: '#80808030',
+    borderRadius: 2,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'flex-end',
     transition: '0.75s ease-in-out'
+    // overflow: 'scroll'
   }
 })

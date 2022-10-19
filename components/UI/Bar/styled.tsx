@@ -3,16 +3,16 @@ export const useStyles = () => ({
   height: '100%',
   '& .Bar': {
     backgroundColor: 'white',
-    color: 'red',
+    color: 'black',
     display: 'flex',
-    flexDirection: 'column reverse',
+    flexDirection: 'column-reverse',
     alignItems: 'flex-end',
     transition: '125ms ease-in-out'
   },
   '& .Bar__Text': { margin: '0 auto 0.25rem' },
-  '& .Bar_sorted': { backgroundColor: 'green' },
-  '& .Bar_stateD': { backgroundColor: 'blue' },
-  '& .Bar_stateC': { backgroundColor: 'red' },
-  '& .Bar_stateB': { backgroundColor: 'pink' },
-  '& .Bar_stateA': { backgroundColor: 'yellow' }
+  '& .Bar_sorted': { backgroundColor: 'success.main' },
+  '& .Bar_stateD': { backgroundColor: 'info.main' },
+  '& .Bar_stateC': { backgroundColor: 'error.main' },
+  '& .Bar_stateB': { backgroundColor: 'secondary.main' },
+  '& .Bar_stateA': { backgroundColor: 'primary.main' }
 })

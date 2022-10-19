@@ -1,4 +1,4 @@
-export const newTrace = (array: any) => {
+export const newTrace = (array: Array<number | string>) => {
   return [
     {
       array: [...array],
@@ -13,19 +13,19 @@ export const newTrace = (array: any) => {
 
 export const addToTrace = (
   trace: {
-    array: any
-    groupA: any
-    groupB: any
-    groupC: any
-    groupD: any
-    sortedIndices: any
+    array: Array<number | string>
+    groupA: Array<number | string>
+    groupB: Array<number | string>
+    groupC: Array<number | string>
+    groupD: Array<number | string>
+    sortedIndices: Array<number | string>
   }[],
-  array: any,
-  sortedIndices = [],
-  groupA = [],
-  groupB = [],
-  groupC = [],
-  groupD = []
+  array: Array<number | string>,
+  sortedIndices: Array<number | string> = [],
+  groupA: Array<number | string> = [],
+  groupB: Array<number | string> = [],
+  groupC: Array<number | string> = [],
+  groupD: Array<number | string> = []
 ) => {
   trace.push({
     array: [...array],
@@ -42,25 +42,28 @@ export const lastSorted = (trace: any) => {
 }
 
 export const swap = (
-  array: { [x: string]: any },
-  i: string | number,
-  j: string | number
-) => {
+  array: Array<number | string>,
+  i: number,
+  j: number
+): void => {
   const tmp = array[i]
   array[i] = array[j]
   array[j] = tmp
 }
 
-export const createRange = (start: any, end: any) => {
+export const createRange = (
+  start: number,
+  end: number
+): Array<number | string> => {
   const a: any = Array(end - start)?.keys()
   return [...a].map((elem) => elem + start)
 }
 
 export const createKey = (
-  groupA?: any,
-  groupB?: any,
-  groupC?: any,
-  groupD?: any
+  groupA?: string,
+  groupB?: string,
+  groupC?: string,
+  groupD?: Array<number | string>
 ) => {
   return { groupA, groupB, groupC, groupD }
 }

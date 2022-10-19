@@ -14,7 +14,7 @@ const getListOfBars = (
   sortedIndices: any[]
 ) => {
   return numbers.map((num: any, i: any) => {
-    let width = 500 / numbers.length
+    let width = 1000 / numbers.length
     let height = (num / maxNum) * 100
     let stateA = groupA.includes(i)
     let stateB = groupB.includes(i)
@@ -24,7 +24,7 @@ const getListOfBars = (
 
     // console.log(width, height)
 
-    let margin = i === numbers.length ? '0' : width > 3 ? '0.5rem' : '0.125rem'
+    let margin = i === numbers.length ? '0' : width > 3 ? '0.1rem' : '0.025rem'
     return (
       <Bar
         key={`${i}_${num}`}

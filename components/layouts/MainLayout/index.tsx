@@ -5,18 +5,14 @@ import {
   AppBar,
   Box,
   Button,
-  Divider,
-  Drawer,
   IconButton,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
   Toolbar,
   Typography
 } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import Link from 'next/link'
+import CustomDrawer from './drawer'
+import AppFooter from './footer'
 
 type Props = {
   children: ReactFragment
@@ -24,11 +20,11 @@ type Props = {
   description: string
 }
 
-const drawerWidth = 240
 const navItems = [
-  { path: 'Inicio', link: '/' },
-  { path: 'Como funciona?', link: '/animation' },
-  { path: 'Analisis computacional', link: 'analytics' }
+  { path: '¿Qué es?', link: '/' },
+  { path: '¿Como funciona?', link: '/animation' },
+  { path: 'Analisis computacional', link: '/analytics' },
+  { path: 'Generar csv datos', link: '/generateArrays' }
 ]
 
 const variants = {
@@ -39,30 +35,9 @@ const variants = {
 
 const MainLayout = ({ children, title, description }: Props): JSX.Element => {
   const [mobileOpen, setMobileOpen] = React.useState(false)
-
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen)
   }
-
-  const drawer = (
-    <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-      <Typography variant="h6" sx={{ my: 2 }}>
-        MUI
-      </Typography>
-      <Divider />
-      <List>
-        {navItems.map((item) => (
-          <ListItem key={item.path} disablePadding>
-            <ListItemButton sx={{ textAlign: 'center' }}>
-              <ListItemText primary={item.path} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-    </Box>
-  )
-
-  const container = undefined
   return (
     <div>
       <Head>
@@ -94,44 +69,38 @@ const MainLayout = ({ children, title, description }: Props): JSX.Element => {
                 <MenuIcon />
               </IconButton>
               <Typography
-                variant="h6"
-                component="div"
-                sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+                variant="h4"
+                fontWeight="bold"
+                textTransform="uppercase"
+                textAlign={{ xs: 'center', md: 'left' }}
+                component={motion.h1}
+                whileHover={{ scale: 1.05 }}
+                sx={{ flexGrow: 1, display: { sm: 'block' } }}
               >
                 Shell sort
               </Typography>
               <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
                 {navItems.map((item) => (
                   <Link href={item.link} key={item.path}>
-                    <Button sx={{ color: '#fff' }}>{item.path}</Button>
+                    <Button sx={{ color: '#fff', textTransform: 'initial' }}>
+                      {item.path}
+                    </Button>
                   </Link>
                 ))}
               </Box>
             </Toolbar>
           </AppBar>
           <Box component="nav">
-            <Drawer
-              container={container}
-              variant="temporary"
-              open={mobileOpen}
-              onClose={handleDrawerToggle}
-              ModalProps={{
-                keepMounted: true // Better open performance on mobile.
-              }}
-              sx={{
-                display: { xs: 'block', sm: 'none' },
-                '& .MuiDrawer-paper': {
-                  boxSizing: 'border-box',
-                  width: drawerWidth
-                }
-              }}
-            >
-              {drawer}
-            </Drawer>
+            <CustomDrawer
+              navItems={navItems}
+              handleDrawerToggle={handleDrawerToggle}
+              mobileOpen={mobileOpen}
+            />
           </Box>
           <Box sx={{ py: 8, width: '100%' }}>{children}</Box>
         </Box>
       </motion.main>
+      <AppFooter />
     </div>
   )
 }
