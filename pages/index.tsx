@@ -4,17 +4,25 @@ import { Container } from '@mui/system'
 import { MainLayout } from 'components/layouts'
 import App from 'components/UI/Data'
 import ProgressTopBar from 'components/UI/ProgressTopBar'
+import { useSort } from 'context/sortMethods'
 import { AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
+import { title } from 'process'
 import React from 'react'
 import { NextPageWithLayout } from './_app'
 
 const HomePage: NextPageWithLayout = () => {
+  const {
+    state: { title, description },
+    dispatch
+  } = useSort()
+
   return (
     <>
       <Container sx={{ mb: 10 }}>
         <ProgressTopBar />
         <AnimatePresence>
+          {description()}
           <Typography variant="h3" textAlign="center" mt={3}>
             <code>¿Qué es shell sort?</code>
           </Typography>
@@ -59,7 +67,7 @@ const HomePage: NextPageWithLayout = () => {
 
 HomePage.getLayout = (page: any) => {
   return (
-    <MainLayout title="inicio" description="algoritmo shell sort en typescript">
+    <MainLayout title="inicio" description="Analisis computacional con react">
       {page}
     </MainLayout>
   )

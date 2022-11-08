@@ -13,6 +13,7 @@ import lightThemeOptions from '../styles/theme/lightThemeOptions'
 import '../styles/globals.css'
 import { AnimatePresence } from 'framer-motion'
 import { NextPage } from 'next'
+import { SortProvider } from 'context/sortMethods'
 
 export type NextPageWithLayout = NextPage & {
   getLayout?: (page: React.ReactElement) => React.ReactNode
@@ -31,19 +32,22 @@ const MyApp: React.FunctionComponent<MyAppProps> = (props) => {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props
 
   const getLayout = Component.getLayout ?? ((page) => page)
+
   return (
-    <CacheProvider value={emotionCache}>
-      <ThemeProvider theme={lightTheme}>
-        <CssBaseline />
-        <AnimatePresence
-          exitBeforeEnter
-          initial={false}
-          onExitComplete={() => window.scrollTo(0, 0)}
-        >
-          {getLayout(<Component {...pageProps} />)}
-        </AnimatePresence>
-      </ThemeProvider>
-    </CacheProvider>
+    <SortProvider>
+      <CacheProvider value={emotionCache}>
+        <ThemeProvider theme={lightTheme}>
+          <CssBaseline />
+          <AnimatePresence
+            exitBeforeEnter
+            initial={false}
+            onExitComplete={() => window.scrollTo(0, 0)}
+          >
+            {getLayout(<Component {...pageProps} />)}
+          </AnimatePresence>
+        </ThemeProvider>
+      </CacheProvider>
+    </SortProvider>
   )
 }
 

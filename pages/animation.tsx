@@ -18,12 +18,17 @@ import {
 import { Box } from '@mui/system'
 import { MainLayout } from 'components/layouts'
 import SortChart from 'components/UI/SortView'
-import ShellSort from 'feature/shellSort/algoritmit'
 import React, { useRef, useState } from 'react'
 import { useEffect } from 'react'
 import { NextPageWithLayout } from './_app'
+import { useSort } from 'context/sortMethods'
 
-const Animation: NextPageWithLayout = () => {
+const AnimationPage: NextPageWithLayout = () => {
+  //context
+  const {
+    state: { title, methodAnimation }
+  } = useSort()
+
   const [state, setState] = useState<any>({
     traceStep: -1,
     originalArray: [],
@@ -67,7 +72,7 @@ const Animation: NextPageWithLayout = () => {
   }, [sizeArray])
 
   const onClickStart = async () => {
-    const traceData: any = ShellSort(state.array)
+    const traceData: any = methodAnimation(state.array)
     setTrace(traceData)
     run(traceData)
   }
@@ -140,7 +145,7 @@ const Animation: NextPageWithLayout = () => {
   return (
     <Container sx={{ py: 3 }}>
       <Typography textAlign="center" variant="h3" fontWeight="bold" mb={4}>
-        Animación del metodo de ordenamiento shell
+        Animación del metodo {title}
       </Typography>
       <Stack mb={10}>
         <FormControl>
@@ -246,12 +251,15 @@ const Animation: NextPageWithLayout = () => {
   )
 }
 
-Animation.getLayout = (page: any) => {
+AnimationPage.getLayout = (page: any) => {
   return (
-    <MainLayout title="inicio" description="algoritmo shell sort en typescript">
+    <MainLayout
+      title="Animacion"
+      description="Animacion de algoritmos de ordenamiento"
+    >
       {page}
     </MainLayout>
   )
 }
 
-export default Animation
+export default AnimationPage

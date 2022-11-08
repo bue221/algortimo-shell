@@ -1,11 +1,16 @@
-import React, { ReactFragment } from 'react'
+import React, { ReactFragment, useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import Head from 'next/head'
 import {
   AppBar,
   Box,
   Button,
+  FormControl,
   IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
   Toolbar,
   Typography
 } from '@mui/material'
@@ -13,6 +18,8 @@ import MenuIcon from '@mui/icons-material/Menu'
 import Link from 'next/link'
 import CustomDrawer from './drawer'
 import AppFooter from './footer'
+import { useSort } from 'context/sortMethods'
+import { OptionsSort } from 'utility/sortOptions'
 
 type Props = {
   children: ReactFragment
@@ -38,10 +45,25 @@ const MainLayout = ({ children, title, description }: Props): JSX.Element => {
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen)
   }
+
+  const [select, setSelect] = useState('shell')
+  const handleChange = (e: SelectChangeEvent) => setSelect(e.target.value)
+
+  const { state, dispatch } = useSort()
+
+  useEffect(() => {
+    if (select === 'shell')
+      dispatch({ type: 'setMethod', payload: OptionsSort[select] })
+    if (select === 'quick')
+      dispatch({ type: 'setMethod', payload: OptionsSort[select] })
+    if (select === 'bubble')
+      dispatch({ type: 'setMethod', payload: OptionsSort[select] })
+  }, [dispatch, select])
+
   return (
     <div>
       <Head>
-        <title>{`Shell sort | ${title}`}</title>
+        <title>{`Analisis de algoritmos | ${title}`}</title>
         <meta name="description" content={description} />
       </Head>
       <motion.main
@@ -50,11 +72,6 @@ const MainLayout = ({ children, title, description }: Props): JSX.Element => {
         exit="exit"
         variants={variants}
         transition={{ type: 'linear' }}
-        className="
-                    flex flex-col items-start w-full pt-10
-                    px-8 sm:px-16 md:px-36 lg:px-52 xl:px-80 2xl:px-96
-                    pt-24 h-full
-                "
       >
         <Box sx={{ display: 'flex' }}>
           <AppBar component="nav">
@@ -77,9 +94,15 @@ const MainLayout = ({ children, title, description }: Props): JSX.Element => {
                 whileHover={{ scale: 1.05 }}
                 sx={{ flexGrow: 1, display: { sm: 'block' } }}
               >
-                Shell sort
+                {state.title}
               </Typography>
-              <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+              <Box
+                sx={{
+                  display: { xs: 'none', md: 'flex' },
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
                 {navItems.map((item) => (
                   <Link href={item.link} key={item.path}>
                     <Button sx={{ color: '#fff', textTransform: 'initial' }}>
@@ -87,6 +110,20 @@ const MainLayout = ({ children, title, description }: Props): JSX.Element => {
                     </Button>
                   </Link>
                 ))}
+                <FormControl sx={{ m: 1, minWidth: 100 }} size="small">
+                  <InputLabel id="method-select">Método</InputLabel>
+                  <Select
+                    value={select}
+                    onChange={handleChange}
+                    labelId="method-select"
+                    autoWidth
+                    label="Método"
+                  >
+                    <MenuItem value="shell">Shell sort</MenuItem>
+                    <MenuItem value="bubble">Bubble sort</MenuItem>
+                    <MenuItem value="quick">Quick sort</MenuItem>
+                  </Select>
+                </FormControl>
               </Box>
             </Toolbar>
           </AppBar>

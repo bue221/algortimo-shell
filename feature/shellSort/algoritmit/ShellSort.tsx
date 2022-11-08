@@ -1,4 +1,3 @@
-import React from 'react'
 import { swap, newTrace, addToTrace, createRange, createKey } from '../helpers'
 
 const ShellSort = (nums: Array<number | string>) => {
@@ -28,27 +27,5 @@ const ShellSort = (nums: Array<number | string>) => {
 }
 
 export const ShellSortKey = createKey('Comparing', 'Swapping')
-
-export const ShellSortDesc = {
-  title: 'Shell Sort',
-  worstCase: (
-    <span>
-      O(<em>n</em>
-      <sup>2</sup>)
-    </span>
-  ),
-  avgCase: (
-    <span>
-      O(<em>n</em>
-      <sup>3/2</sup>)
-    </span>
-  ),
-  bestCase: (
-    <span>
-      O(<em>n</em> log <em>n</em>)
-    </span>
-  ),
-  space: <span>O(1)</span>
-}
 
 export default ShellSort

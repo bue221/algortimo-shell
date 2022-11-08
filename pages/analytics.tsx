@@ -10,11 +10,7 @@ import {
   TextField,
   Typography
 } from '@mui/material'
-import {
-  iteratorMethod,
-  iteratorMethodWithImportData,
-  shellSortMethod
-} from 'utility/functions'
+import { iteratorMethod, iteratorMethodWithImportData } from 'utility/functions'
 import { MainLayout } from '../components/layouts'
 import { NextPageWithLayout } from './_app'
 import {
@@ -34,6 +30,7 @@ import { useForm } from 'react-hook-form'
 import { useState } from 'react'
 import { LoadingButton } from '@mui/lab'
 import Papa from 'papaparse'
+import { useSort } from 'context/sortMethods'
 
 ChartJS.register(
   CategoryScale,
@@ -52,7 +49,10 @@ interface IForm {
   avance: number
 }
 
-const Home: NextPageWithLayout = () => {
+const AnalyticsPage: NextPageWithLayout = () => {
+  const {
+    state: { title, methodAnalitycs }
+  } = useSort()
   const { register, handleSubmit, watch } = useForm<IForm>({
     defaultValues: {
       typeData: 'aleatorio',
@@ -73,10 +73,10 @@ const Home: NextPageWithLayout = () => {
       const info =
         watch('typeData') != 'aleatorio'
           ? await iteratorMethodWithImportData(data1, (data) =>
-              shellSortMethod(data)
+              methodAnalitycs(data)
             )
           : await iteratorMethod(data.iter, data.avance, data.start, (data) =>
-              shellSortMethod(data)
+              methodAnalitycs(data)
             )
       setExperimentalData(info as any)
     } catch (err) {
@@ -133,10 +133,10 @@ const Home: NextPageWithLayout = () => {
   )
   const [data1, setData] = useState<any>([])
   return (
-    <Container>
-      <Box>
+    <Container maxWidth="xl">
+      <Box width="100%">
         <Typography variant="h1" textAlign="center" fontWeight="bold">
-          Shell sort
+          {title}
         </Typography>
         <Typography variant="h4" textAlign="center">
           ... Analisis computacional ....
@@ -263,12 +263,15 @@ const Home: NextPageWithLayout = () => {
   )
 }
 
-Home.getLayout = (page: any) => {
+AnalyticsPage.getLayout = (page: any) => {
   return (
-    <MainLayout title="inicio" description="algoritmo shell sort en typescript">
+    <MainLayout
+      title="Analisis computacional"
+      description="Analisis computacional a algoritmos de ordenamiento"
+    >
       {page}
     </MainLayout>
   )
 }
 
-export default Home
+export default AnalyticsPage
