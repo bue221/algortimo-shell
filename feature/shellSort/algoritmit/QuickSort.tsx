@@ -1,3 +1,4 @@
+import { Typography } from '@mui/material'
 import React from 'react'
 import {
   newTrace,
@@ -124,44 +125,49 @@ export const QuickSortDesc = {
   title: 'Quick Sort',
   description: (
     <div>
-      <p>
-        <a
-          href="https://en.wikipedia.org/wiki/Quicksort"
+      <Typography variant="subtitle1" textAlign="center" mt={2}>
+        <Typography
+          color="secondary"
+          component="a"
+          href="https://es.wikipedia.org/wiki/Quicksort"
           target="_blank"
           rel="noopener noreferrer"
         >
           Quick Sort
-        </a>{' '}
-        is an efficient, in-place sorting algorith that in practice is faster
-        than MergeSort and HeapSort. However, it is not a stable sorting
-        algorithm, meaning that the relative positioning of equal sort items is
-        not preserved.Quicksort is a divide and conquer algorithm. Quicksort
-        first divides a large array into two smaller sub-arrays: the low
-        elements and the high elements. Quicksort can then recursively sort the
-        sub-arrays. The steps are:
-      </p>
+        </Typography>{' '}
+        es un algoritmo de clasificación en el lugar eficiente que en la
+        práctica es más rápido que MergeSort y HeapSort. Sin embargo, no es una
+        clasificación estable. algoritmo, lo que significa que el
+        posicionamiento relativo de elementos de igual orden es no
+        conservado.Quicksort es un algoritmo de divide y vencerás. Ordenación
+        rápida primero divide una matriz grande en dos sub-matrices más
+        pequeñas: la baja elementos y los elementos altos. Quicksort puede luego
+        ordenar recursivamente el sub-matrices. Los pasos son:
+      </Typography>
       <ol>
         <li>
-          Pick an element, called a pivot, from the array. This is usually done
-          at random.
+          Elija un elemento, llamado pivote, de la matriz. Esto generalmente se
+          hace al azar.
         </li>
-        <li>Move pivot element to the start of the array.</li>
+        <li>Mueva el elemento pivote al comienzo de la matriz.</li>
         <li>
-          <em>Partitioning:</em> reorder the array so that all elements with
-          values less than the pivot come before the pivot, while all elements
-          with values greater than the pivot come after it (equal values can go
-          either way). After this partitioning, the pivot is in its final
-          position. This is called the <em>partition</em> operation.
+          <em>Fraccionamiento:</em> rordene la matriz para que todos los
+          elementos con los valores menores que el pivote vienen antes que el
+          pivote, mientras que todos los elementos con valores mayores que el
+          pivote vienen después de él (los valores iguales pueden ir de todas
+          formas). Después de esta partición, el pivote se encuentra en su etapa
+          final. posición. Esto se llama la operacion de{' '}
+          <em>fraccionamiento</em>.
         </li>
         <li>
-          Recursively apply the above steps to the sub-array of elements with
-          smaller values and separately to the sub-array of elements with
-          greater values.
+          Aplique recursivamente los pasos anteriores al subarreglo de elementos
+          con valores más pequeños y por separado a la sub-matriz de elementos
+          con mayores valores.
         </li>
       </ol>
       <p>
-        The base case of the recursion is an array of size zero or one, which
-        are sorted by definition.
+        El caso base de la recursividad es una matriz de tamaño cero o uno, que
+        están ordenados por definición.
       </p>
     </div>
   ),
@@ -179,11 +185,6 @@ export const QuickSortDesc = {
   bestCase: (
     <span>
       O(<em>n</em>log<em>n</em>)
-    </span>
-  ),
-  space: (
-    <span>
-      O(log<em>n</em>)
     </span>
   )
 }

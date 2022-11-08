@@ -9,7 +9,7 @@ type State = {
   title: string
   methodAnimation: any
   methodAnalitycs: any
-  description: () => React.ReactNode
+  description: any
 }
 type SortProviderProps = { children: React.ReactNode }
 

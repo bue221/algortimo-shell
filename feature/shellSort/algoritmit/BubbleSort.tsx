@@ -1,3 +1,4 @@
+import { Typography } from '@mui/material'
 import { swap, newTrace, addToTrace, lastSorted, createKey } from '../helpers'
 
 const BubbleSort = (nums: any[]) => {
@@ -23,21 +24,24 @@ export const BubbleSortKey = createKey('Comparing', 'Swapping')
 export const BubbleSortDesc = {
   title: 'Bubble Sort',
   description: (
-    <p>
-      <a
-        href="https://en.wikipedia.org/wiki/Bubble_sort"
+    <Typography variant="subtitle1">
+      <Typography
+        component="a"
+        color="secondary"
+        href="https://es.wikipedia.org/wiki/Bubble_sort"
         target="_blank"
         rel="noopener noreferrer"
       >
         Bubble Sort
-      </a>{' '}
-      is a simple sorting algorithm that repeatedly steps through the list,
-      compares adjacent elements and swaps them if they are in the wrong
-      order.The pass through the list is repeated until the list is sorted. The
-      algorithm, which is a comparison sort, is named for the way smaller or
-      larger elements bubble to the top of the list. Although the algorithm is
-      simple, it is too slow and impractical for most problems
-    </p>
+      </Typography>{' '}
+      es un algoritmo de clasificación simple que recorre repetidamente la
+      lista, compara elementos adyacentes y los intercambia si están en el mal
+      orden. El paso por la lista se repite hasta que se ordena la lista. los
+      algoritmo, que es un tipo de comparación, se llama así por la forma más
+      pequeña o los elementos más grandes aparecen en la parte superior de la
+      lista. Aunque el algoritmo es simple, es demasiado lento y poco práctico
+      para la mayoría de los problemas
+    </Typography>
   ),
   worstCase: (
     <span>

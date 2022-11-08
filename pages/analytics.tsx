@@ -58,7 +58,7 @@ const AnalyticsPage: NextPageWithLayout = () => {
       typeData: 'aleatorio',
       start: 1000,
       iter: 10,
-      avance: 10
+      avance: 1000
     }
   })
 
@@ -183,7 +183,7 @@ const AnalyticsPage: NextPageWithLayout = () => {
                   placeholder="Ingrese el valor de inicio"
                 />
                 <TextField
-                  InputProps={{ inputProps: { min: 10, max: 50 } }}
+                  InputProps={{ inputProps: { min: 10, max: 100 } }}
                   {...register('iter')}
                   type="number"
                   variant="outlined"
